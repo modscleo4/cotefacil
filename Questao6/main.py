@@ -17,7 +17,7 @@ class Author:
 
 class Quote:
     def __init__(self, text: str, tags: list[str]) -> None:
-        self.texto = text
+        self.text = text
         self.tags = tags
 
 
@@ -73,6 +73,8 @@ def main() -> None:
         return
 
     print(json.dumps({"author": author.__dict__, "quotes": [q.__dict__ for q in quotes]}, indent=4))
+
+    driver.quit()
 
 
 if __name__ == "__main__":

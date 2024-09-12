@@ -25,12 +25,12 @@ cd Questao5
 python tests.py
 ```
 
-### Questão 7
-Para executar a questão 7, basta gerar a imagem Docker e executar o container:
+### Questão 6
+Para executar a questão 6, basta gerar a imagem Docker e executar o container:
 ```bash
 cd Questao7
-docker build -t questao7 .
-docker run questao7
+docker build -t questao6 .
+docker run questao6 [autor]
 ```
 
 ## Observações
