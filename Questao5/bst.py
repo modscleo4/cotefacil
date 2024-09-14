@@ -34,6 +34,8 @@ class BinarySearchTreeNode:
     def delete(self, value: int) -> Optional[Self]:
         '''
         Delete a value from the binary search tree.
+        If the value is not present, return None.
+        When deleting the root node, return the new root node.
         '''
 
         if value < self.value:
@@ -45,7 +47,7 @@ class BinarySearchTreeNode:
         else:
             if not self.left:
                 return self.right
-            elif not self.right:
+            if not self.right:
                 return self.left
 
             min_larger_node = self.right.min()
@@ -55,18 +57,25 @@ class BinarySearchTreeNode:
         return self
 
 
+    def find(self, value: int) -> Optional[Self]:
+        '''
+        Find a node with a specific value in the binary tree.
+        '''
+
+        if value == self.value:
+            return self
+        elif value < self.value:
+            return self.left.find(value) if self.left else None
+        else:
+            return self.right.find(value) if self.right else None
+
+
     def contains(self, value: int) -> bool:
         '''
         Check if a value is present in the binary tree.
         '''
-        if self.value is None:
-            return False
-        elif value == self.value:
-            return True
-        elif value < self.value:
-            return self.left is not None and self.left.contains(value)
-        else:
-            return self.right is not None and self.right.contains(value)
+
+        return bool(self.find(value))
 
 
     def height(self) -> int:

@@ -1,24 +1,27 @@
 from selenium.webdriver.common.by import By
 from driver import Chrome, Firefox
+from dataclasses import dataclass
 import argparse
 import json
+import os
+import sys
 
 SITE_URL = "https://quotes.toscrape.com"
 
 driver = Chrome()
 
+@dataclass
 class Author:
-    def __init__(self, name: str, description: str, birth_date: str, birth_location: str) -> None:
-        self.name = name
-        self.description = description
-        self.birth_date = birth_date
-        self.birth_location = birth_location
+    name: str
+    description: str
+    birth_date: str
+    birth_location: str
 
 
+@dataclass
 class Quote:
-    def __init__(self, text: str, tags: list[str]) -> None:
-        self.text = text
-        self.tags = tags
+    text: str
+    tags: list[str]
 
 
 def extract_quotes(author_name: str) -> tuple[Author | None, list[Quote]]:
@@ -60,7 +63,7 @@ def extract_author_info(author_url: str) -> Author:
     return Author(name, description, birth_date, birth_location)
 
 
-def main() -> None:
+def main() -> int:
     parser = argparse.ArgumentParser(description="Script para extrair citações do site Quotes to Scrape")
     parser.add_argument("autor", type=str, help="Nome do autor")
     args = parser.parse_args()
@@ -69,13 +72,24 @@ def main() -> None:
 
     (author, quotes) = extract_quotes(author_name)
     if author is None:
-        print("Autor não encontrado")
-        return
+        print("Autor não encontrado", file=sys.stderr)
+        return 1
 
-    print(json.dumps({"author": author.__dict__, "quotes": [q.__dict__ for q in quotes]}, indent=4))
+    out = json.dumps({"author": author.__dict__, "quotes": [q.__dict__ for q in quotes]}, indent=2, ensure_ascii=False)
+    print(out)
+
+    try:
+        if not os.path.exists("data"):
+            os.makedirs("data")
+
+        with open(f"data/{author_name}.json", "w") as f:
+            f.write(out)
+    except Exception as e:
+        print(f"Erro ao salvar arquivo: {e}", file=sys.stderr)
 
     driver.quit()
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

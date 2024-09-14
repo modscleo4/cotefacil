@@ -18,7 +18,7 @@ FEEDS = {
         "encoding": "utf8",
         "store_empty": False,
         "fields": None,
-        "indent": 4,
+        "indent": 2,
         "item_export_kwargs": {
             "export_empty_fields": True
         }

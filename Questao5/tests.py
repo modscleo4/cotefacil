@@ -4,12 +4,9 @@ from bst import BinarySearchTreeNode
 class TestBinarySearchTreeNode(unittest.TestCase):
     def setUp(self):
         self.root = BinarySearchTreeNode(10)
-        self.root.insert(5)
-        self.root.insert(15)
-        self.root.insert(2)
-        self.root.insert(7)
-        self.root.insert(12)
-        self.root.insert(20)
+        values = [5, 15, 2, 7, 12, 20]
+        for value in values:
+            self.root.insert(value)
 
 
     def test_insert(self):
@@ -29,11 +26,69 @@ class TestBinarySearchTreeNode(unittest.TestCase):
         self.assertFalse(self.root.contains(-5), "Value -5 should not be present in the tree.")
 
 
-    def test_delete(self):
-        self.root.insert(999)
-        self.assertTrue(self.root.contains(999), "Value 999 should be present in the tree after insertion.")
-        self.root.delete(999)
-        self.assertFalse(self.root.contains(999), "Value 999 should not be present in the tree after deletion.")
+    def test_delete_root(self):
+        root = BinarySearchTreeNode(10)
+        values = [5, 15, 2, 7, 12, 20]
+        for value in values:
+            root.insert(value)
+
+        self.assertEqual(root.size(), 7, "Size of the tree is not as expected.")
+        root.delete(10)
+        self.assertFalse(root.contains(10), "Value 10 should not be present in the tree after deletion.")
+        self.assertEqual(root.size(), 6, "Size of the tree is not as expected.")
+        for value in values:
+            self.assertTrue(root.contains(value), f"Value {value} should be present in the tree.")
+
+
+    def test_delete_leaf(self):
+        root = BinarySearchTreeNode(10)
+        values = [5, 15, 2, 7, 12, 20]
+        for value in values:
+            root.insert(value)
+
+        self.assertEqual(root.size(), 7, "Size of the tree is not as expected.")
+        root.delete(2)
+        self.assertFalse(root.contains(2), "Value 2 should not be present in the tree after deletion.")
+        self.assertEqual(root.size(), 6, "Size of the tree is not as expected.")
+        for value in values:
+            if value == 2:
+                continue
+
+            self.assertTrue(root.contains(value), f"Value {value} should be present in the tree.")
+
+
+    def test_delete_node_with_one_child(self):
+        root = BinarySearchTreeNode(10)
+        values = [5, 15, 2, 7, 12, 20, 1]
+        for value in values:
+            root.insert(value)
+
+        self.assertEqual(root.size(), 8, "Size of the tree is not as expected.")
+        root.delete(2)
+        self.assertFalse(root.contains(2), "Value 2 should not be present in the tree after deletion.")
+        self.assertEqual(root.size(), 7, "Size of the tree is not as expected.")
+        for value in values:
+            if value == 2:
+                continue
+
+            self.assertTrue(root.contains(value), f"Value {value} should be present in the tree.")
+
+
+    def test_delete_node_with_two_children(self):
+        root = BinarySearchTreeNode(10)
+        values = [5, 15, 2, 7, 12, 20]
+        for value in values:
+            root.insert(value)
+
+        self.assertEqual(root.size(), 7, "Size of the tree is not as expected.")
+        root.delete(15)
+        self.assertFalse(root.contains(15), "Value 15 should not be present in the tree after deletion.")
+        self.assertEqual(root.size(), 6, "Size of the tree is not as expected.")
+        for value in values:
+            if value == 15:
+                continue
+
+            self.assertTrue(root.contains(value), f"Value {value} should be present in the tree.")
 
 
     def test_height(self):
